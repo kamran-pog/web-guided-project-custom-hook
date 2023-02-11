@@ -21,23 +21,38 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const initialValues = {
+   username: localStorage.getItem('username')  ? localStorage.getItem('username') : '', email: localStorage.getItem('email') ? localStorage.getItem('email') : ""
+}
+
 export default function SignupForm() {
   const classes = useStyles();
-  const [firstName, setFirstName] = useState("");
+  
+  const useForm = (initialValues) => {
+    const [values, setValues] = useState(initialValues);
 
   const handleChanges = e => {
-    setFirstName(e.target.value);
-  };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    alert(firstName);
+    console.log(e.target.name, "e.target.name") //=> firstName, lastName, email
+    setValues({
+      ...values,
+      [e.target.name] : e.target.value
+     });
   };
 
   const clearForm = e => {
     e.preventDefault();
-    setFirstName("");
+    setValues(initialValues)
   };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    alert(values.firstName + " " + values.lastName + " " + values.email);
+  };
+
+  return([values, handleChanges, clearForm, handleSubmit]);
+}
+
+const [values, handleChanges, clearForm, handleSubmit] = useForm('sing-in', initialValue, callback);
 
   return (
     <div p={2} className="form">
@@ -46,10 +61,30 @@ export default function SignupForm() {
           <legend>Add New Client</legend>
           <TextField
             id="outlined-name"
-            label="First Name"
+            label="User Name"
             className={classes.textField}
-            name="firstName"
-            value={firstName}
+            name="username"
+            value={values.username}
+            onChange={handleChanges}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            id="outlined-name"
+            label="Last Name"
+            className={classes.textField}
+            name="lastname"
+            value={values.lastname}
+            onChange={handleChanges}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            id="outlined-name"
+            label="email"
+            className={classes.textField}
+            name="email"
+            value={values.email}
             onChange={handleChanges}
             margin="normal"
             variant="outlined"
@@ -66,4 +101,4 @@ export default function SignupForm() {
       </form>
     </div>
   );
-}
+  }
